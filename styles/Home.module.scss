@@ -1,0 +1,40 @@
+.header {
+  display: flex;
+  background-color: #ffa500;
+}
+
+.main {
+  display: flex;
+  flex: 1 1;
+  min-height: 0;
+}
+
+.sidenav {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  width: 200px;
+  overflow: auto;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      height: 60px;
+      border-bottom: 1px solid #c7c7c7;
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px;
+  position: sticky;
+  top: 0px;
+  background-color: white;
+}
+
+.contentWrapper {
+  flex: 1;
+}
