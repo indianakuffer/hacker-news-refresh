@@ -1,7 +1,17 @@
+@import "colors.scss";
+
 .iframe {
   height: 2000px;
   display: none;
 }
 .visible {
   display: block;
+}
+.commentsWrapper {
+  margin: 0;
+  padding: 0;
+}
+.author,
+.time {
+  color: $color-grey;
 }

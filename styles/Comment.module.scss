@@ -1,0 +1,16 @@
+@import "colors.scss";
+
+.comment {
+  list-style-type: none;
+  margin: 12px 0;
+  background-color: $color-lightest-grey;
+  padding: 12px;
+
+  div {
+    white-space: pre-line;
+  }
+}
+
+.text {
+  margin-bottom: 16px;
+}

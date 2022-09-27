@@ -1,0 +1,19 @@
+@import "colors.scss";
+
+.link {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid $color-lighter-grey;
+  padding: 12px 8px;
+  min-height: 80px;
+  background-color: white;
+
+  &:hover {
+    background-color: $color-lightest-grey;
+  }
+}
+
+.title {
+  font-weight: 600;
+  margin-bottom: 12px;
+}

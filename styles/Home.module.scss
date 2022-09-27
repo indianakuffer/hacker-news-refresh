@@ -1,6 +1,15 @@
+@import "_colors.scss";
+
 .header {
   display: flex;
-  background-color: #ffa500;
+  align-items: center;
+  background-color: $color-orange;
+  height: 50px;
+}
+
+.title {
+  margin: 0;
+  padding: 0;
 }
 
 .main {
@@ -10,31 +19,24 @@
 }
 
 .sidenav {
+  position: relative;
   display: flex;
   flex-direction: column;
   border: 1px solid black;
-  width: 200px;
+  width: 400px;
   overflow: auto;
 
   ul {
     margin: 0;
     padding: 0;
-    li {
-      height: 60px;
-      border-bottom: 1px solid #c7c7c7;
-    }
   }
 }
 
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px;
-  position: sticky;
-  top: 0px;
-  background-color: white;
-}
-
 .contentWrapper {
+  display: flex;
+  flex-direction: column;
   flex: 1;
+  height: 100%;
+  overflow: auto;
+  min-width: 0;
 }

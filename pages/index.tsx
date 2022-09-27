@@ -3,15 +3,18 @@ import Head from "next/head";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import Content from "../components/Content";
+import StoryLink from "../components/StoryLink";
 import styles from "../styles/Home.module.scss";
+import { Story } from "../global/interfaces";
+import Pagination from "../components/Pagination";
 
 const Home: NextPage = () => {
   const [stories, setStories] = useState<number[]>([]);
-  const [storyData, setStoryData] = useState<{}>({});
   const [displayedStories, setDisplayedStories] = useState<number[]>([]);
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-  const [expandedStory, setExpandedStory] = useState<number | null>();
+  const [storyData, setStoryData] = useState<{ [id: number]: Story }>({});
+  const [page, setPage] = useState<number>(1);
+  const [perPage, setPerPage] = useState<number>(20);
+  const [expandedStory, setExpandedStory] = useState<number | null>(null);
 
   useEffect(() => {
     // on load, get top stories
@@ -19,33 +22,32 @@ const Home: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    // when stories updates, update displayed stories
-    setDisplayedStories(stories.slice((page - 1) * perPage, page * perPage));
-    displayedStories.forEach(async (storyId) => {
-      if (!storyData[storyId]) {
-        const data = await fetch(
+    // when stories or page updates, update displayed stories
+    const currentPageStories = stories.slice(
+      (page - 1) * perPage,
+      page * perPage
+    );
+    const currentAndNextPageStories = stories.slice(
+      (page - 1) * perPage,
+      (page + 1) * perPage
+    );
+    setDisplayedStories(currentPageStories);
+
+    // fetch next page of missing storyData
+    let newStoryData = storyData;
+    currentAndNextPageStories.forEach(async (storyId) => {
+      if (!newStoryData[storyId]) {
+        const newStory = await fetch(
           `https://hacker-news.firebaseio.com/v0/item/${storyId}.json?print=pretty`
         ).then((res) => res.json());
-        setStoryData({ ...storyData, [storyId]: data });
+        newStoryData[storyId] = newStory;
       }
     });
-
-    // stor
-
-    // let result: any[] = [];
-    // stories
-    //   .slice((page - 1) * perPage, page * perPage)
-    //   .forEach(async (story) => {
-    //     const data = await fetch(
-    //       `https://hacker-news.firebaseio.com/v0/item/${story}.json?print=pretty`
-    //     ).then((res) => res.json());
-    //     result.push(data);
-    //     setDisplayedStories([...result]);
-    //   });
+    setStoryData(newStoryData);
   }, [stories, page]);
 
   useEffect(() => {
-    console.log("opening", expandedStory);
+    document.querySelector("#content-wrapper")!.scrollTop = 0;
   }, [expandedStory]);
 
   const getTopStories = useCallback(async () => {
@@ -76,42 +78,33 @@ const Home: NextPage = () => {
     getBestStories();
   };
 
-  const nextPage = () => {
-    setExpandedStory(null);
-    setPage(page + 1);
-  };
-
-  const prevPage = () => {
-    setExpandedStory(null);
-    setPage(page - 1);
-  };
-
   return (
     <>
       <div className={styles.header}>
-        <h1>Hacker News Refresh</h1>
-        <button onClick={handleTopButtonClick}>Get Top Stories</button>
-        <button onClick={handleBestButtonClick}>Get Best Stories</button>
+        <h1 className={styles.title}>Hacker News Refresh</h1>
+        <button onClick={handleTopButtonClick}>Top Stories</button>
+        <button onClick={handleBestButtonClick}>Best Stories</button>
       </div>
       <main className={styles.main}>
         <div className={styles.sidenav}>
-          <div className={styles.pagination}>
-            <button disabled={page - 1 === 0} onClick={prevPage}>
-              -
-            </button>
-            <span>{page}</span>
-            <button onClick={nextPage}>+</button>
-          </div>
           <ul>
-            {displayedStories.map((story) => (
-              <li key={story.id} onClick={() => setExpandedStory(story)}>
-                <div className="title">{story.title}</div>
-              </li>
+            {displayedStories.map((storyId) => (
+              <StoryLink
+                key={storyId}
+                storyId={storyId}
+                storyData={storyData}
+                setExpandedStory={setExpandedStory}
+              />
             ))}
           </ul>
+          <Pagination
+            page={page}
+            setPage={setPage}
+            setExpandedStory={setExpandedStory}
+          />
         </div>
-        <div className={styles.contentWrapper}>
-          <Content item={expandedStory} />
+        <div id="content-wrapper" className={styles.contentWrapper}>
+          <Content story={expandedStory} />
         </div>
       </main>
     </>

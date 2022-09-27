@@ -1,28 +1,14 @@
 import { useEffect, useState } from "react";
+import { Story } from "../global/interfaces";
+import Comment from "./Comment";
 import styles from "../styles/Content.module.scss";
 
 const Content = (props: any) => {
-  const { item } = props;
-  const [itemData, setItemData] = useState({});
-  const [commentData, setCommentData] = useState([]);
+  const { story }: { story: Story } = props;
   const [iframeVisible, setIframeVisible] = useState(false);
-
-  // const getItemData = async () => {
-  //   const data = await fetch(
-  //     `https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`
-  //   ).then((res) => res.json());
-
-  //   setItemData(data);
-
-  //   // data.kids.forEach(comment => {
-
-  //   // })
-  //   // setCommentData([...data.kids]);
-  // };
 
   useEffect(() => {
     setIframeVisible(false);
-    // getItemData().catch((error) => console.error(error));
   }, [props]);
 
   const handleIframeLoad = () => {
@@ -34,16 +20,20 @@ const Content = (props: any) => {
     }, 500);
   };
 
-  const renderItem = () => {
-    const { title, url } = item;
+  const renderStory = () => {
+    const { title, url, time, by } = story;
     return (
       <>
-        <h1>{title}</h1>
         <a href={url} target="_blank">
-          link
+          <h1>{title}</h1>
         </a>
-        <ul>
-          {commentData && commentData.map((comment) => <li>{comment}</li>)}
+        <div className={styles.author}>{by}</div>
+        {renderTime(time)}
+
+        <ul className={styles.commentsWrapper}>
+          {story.kids.map((comment) => (
+            <Comment key={comment} commentId={comment} />
+          ))}
         </ul>
         <iframe
           className={`${styles.iframe} ${iframeVisible ? styles.visible : ""}`}
@@ -56,7 +46,26 @@ const Content = (props: any) => {
     );
   };
 
-  return <>{item && renderItem()}</>;
+  const renderTime = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    const formattedDate = date.toLocaleString([], {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+    const formattedTime = date.toLocaleString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    return (
+      <span
+        className={styles.time}
+      >{`${formattedTime} - ${formattedDate}`}</span>
+    );
+  };
+
+  return <>{story && renderStory()}</>;
 };
 
 export default Content;
