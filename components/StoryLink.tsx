@@ -3,7 +3,7 @@ import { Story } from "../global/interfaces";
 import styles from "../styles/StoryLink.module.scss";
 
 const StoryLink = (props: any) => {
-  const { storyId, storyData, setExpandedStory } = props;
+  const { storyId, storyData, expandedStory, setExpandedStory } = props;
   const [story, setStory] = useState<Story>(storyData[storyId]);
 
   const getStoryData = useCallback(async () => {
@@ -22,11 +22,13 @@ const StoryLink = (props: any) => {
 
   return (
     <>
-      {story && (
+      {story ? (
         <li
           key={story.id}
           id={`story-${story.id}`}
-          className={styles.link}
+          className={`${styles.link} ${
+            expandedStory && storyId === expandedStory.id ? styles.active : ""
+          }`}
           onClick={() => setExpandedStory(story)}
         >
           <div className={styles.title}>{story.title}</div>
@@ -35,6 +37,8 @@ const StoryLink = (props: any) => {
           </div>
           <div className={styles.score}>🔺 {story.score}</div>
         </li>
+      ) : (
+        <li className={styles.link}></li>
       )}
     </>
   );

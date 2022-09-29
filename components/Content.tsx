@@ -1,47 +1,38 @@
-import { useEffect, useState } from "react";
-import { Story } from "../global/interfaces";
+import { Comment as CommentInterface, Story } from "../global/interfaces";
 import Comment from "./Comment";
 import styles from "../styles/Content.module.scss";
+import { useEffect, useState } from "react";
 
 const Content = (props: any) => {
   const { story }: { story: Story } = props;
-  const [iframeVisible, setIframeVisible] = useState(false);
-
-  useEffect(() => {
-    setIframeVisible(false);
-  }, [props]);
-
-  const handleIframeLoad = () => {
-    const iframeEl = document.querySelector("#preview-frame");
-    setTimeout(() => {
-      if (iframeEl.contentWindow.window.length > 0) {
-        setIframeVisible(true);
-      }
-    }, 500);
-  };
+  const [commentData, setCommentData] = useState<{
+    [commentId: number]: CommentInterface;
+  }>({});
 
   const renderStory = () => {
-    const { title, url, time, by } = story;
+    const { title, time, by, url } = story;
     return (
       <>
-        <a href={url} target="_blank">
-          <h1>{title}</h1>
-        </a>
-        <div className={styles.author}>{by}</div>
-        {renderTime(time)}
+        <div className={styles.storyHeader}>
+          <a href={url} target="_blank">
+            <h1>{title}</h1>
+          </a>
+          <div className={styles.author}>{by}</div>
+          {renderTime(time)}
+        </div>
 
         <ul className={styles.commentsWrapper}>
           {story.kids.map((comment) => (
-            <Comment key={comment} commentId={comment} />
+            <Comment
+              key={comment}
+              commentId={comment}
+              depth={0}
+              firstInSeries={true}
+              commentData={commentData}
+              setCommentData={setCommentData}
+            />
           ))}
         </ul>
-        <iframe
-          className={`${styles.iframe} ${iframeVisible ? styles.visible : ""}`}
-          id="preview-frame"
-          src={url}
-          width="100%"
-          onLoad={handleIframeLoad}
-        />
       </>
     );
   };
@@ -65,7 +56,7 @@ const Content = (props: any) => {
     );
   };
 
-  return <>{story && renderStory()}</>;
+  return <>{renderStory()}</>;
 };
 
 export default Content;

@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   const [storyData, setStoryData] = useState<{ [id: number]: Story }>({});
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(20);
-  const [expandedStory, setExpandedStory] = useState<number | null>(null);
+  const [expandedStory, setExpandedStory] = useState<Story | null>();
 
   useEffect(() => {
     // on load, get top stories
@@ -66,6 +66,14 @@ const Home: NextPage = () => {
     setStories(data);
   }, []);
 
+  const getNewStories = useCallback(async () => {
+    const data = await fetch(
+      "https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty"
+    ).then((res) => res.json());
+
+    setStories(data);
+  }, []);
+
   const handleTopButtonClick = () => {
     page !== 1 ? setPage(1) : null;
     setExpandedStory(null);
@@ -78,12 +86,36 @@ const Home: NextPage = () => {
     getBestStories();
   };
 
+  const handleNewButtonClick = () => {
+    page !== 1 ? setPage(1) : null;
+    setExpandedStory(null);
+    getNewStories();
+  };
+
+  const renderStoriesButtons = () => {
+    return (
+      <>
+        <button className={styles.storiesButton} onClick={handleTopButtonClick}>
+          🔥
+        </button>
+        <button
+          className={styles.storiesButton}
+          onClick={handleBestButtonClick}
+        >
+          👑
+        </button>
+        <button className={styles.storiesButton} onClick={handleNewButtonClick}>
+          👶
+        </button>
+      </>
+    );
+  };
+
   return (
     <>
       <div className={styles.header}>
-        <h1 className={styles.title}>Hacker News Refresh</h1>
-        <button onClick={handleTopButtonClick}>Top Stories</button>
-        <button onClick={handleBestButtonClick}>Best Stories</button>
+        <h2 className={styles.title}>Hacker News Refresh</h2>
+        {renderStoriesButtons()}
       </div>
       <main className={styles.main}>
         <div className={styles.sidenav}>
@@ -93,6 +125,7 @@ const Home: NextPage = () => {
                 key={storyId}
                 storyId={storyId}
                 storyData={storyData}
+                expandedStory={expandedStory}
                 setExpandedStory={setExpandedStory}
               />
             ))}
@@ -104,7 +137,7 @@ const Home: NextPage = () => {
           />
         </div>
         <div id="content-wrapper" className={styles.contentWrapper}>
-          <Content story={expandedStory} />
+          {expandedStory && <Content story={expandedStory} />}
         </div>
       </main>
     </>
