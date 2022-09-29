@@ -14,7 +14,7 @@ const Content = (props: any) => {
     return (
       <>
         <div className={styles.storyHeader}>
-          <a href={url} target="_blank">
+          <a href={url} target="_blank" rel="noreferrer">
             <h1>{title}</h1>
           </a>
           <div className={styles.author}>{by}</div>
