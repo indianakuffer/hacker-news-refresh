@@ -7,12 +7,34 @@
 .storyHeader {
   background-color: $color-white;
   padding: 20px;
+  width: 100%;
+  max-width: calc(1000px - 40px);
+
+  h1:hover {
+    text-decoration: underline;
+    text-decoration-thickness: from-font;
+  }
+
+  .topRow {
+    display: flex;
+    align-items: center;
+    color: $color-grey;
+    font-size: 12px;
+
+    * {
+      margin-right: 8px;
+    }
+
+    .author {
+      color: $color-orange;
+      font-size: 14px;
+    }
+  }
 }
+
 .commentsWrapper {
   margin: 0;
   padding: 20px;
-}
-.author,
-.time {
-  // color: $color-grey;
+  width: 100%;
+  max-width: 1000px;
 }

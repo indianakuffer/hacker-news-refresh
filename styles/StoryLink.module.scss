@@ -1,12 +1,14 @@
 @import "_colors.scss";
 
 .link {
+  position: relative;
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid $color-lighter-grey;
   padding: 12px 12px;
   min-height: 80px;
   background-color: white;
+  cursor: pointer;
 
   &.active {
     box-shadow: inset 5px 0px 0px 0px $color-orange;
@@ -19,5 +21,26 @@
 
 .title {
   font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.author {
+  font-size: 14px;
+  opacity: 0.8;
   margin-bottom: 12px;
+}
+
+.indicatorWrapper {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  justify-content: flex-end;
+  padding: 8px 0;
+}
+
+.score,
+.commentCount {
+  width: 65px;
 }

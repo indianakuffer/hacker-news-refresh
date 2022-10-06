@@ -32,10 +32,13 @@ const StoryLink = (props: any) => {
           onClick={() => setExpandedStory(story)}
         >
           <div className={styles.title}>{story.title}</div>
-          <div className={styles.commentCount}>
-            📣 {story.kids && story.kids.length}
+          <div className={styles.author}>{story.by}</div>
+          <div className={styles.indicatorWrapper}>
+            <div className={styles.commentCount}>
+              📣 {story.kids && story.kids.length}
+            </div>
+            <div className={styles.score}>🔼 {story.score}</div>
           </div>
-          <div className={styles.score}>🔺 {story.score}</div>
         </li>
       ) : (
         <li className={styles.link}></li>

@@ -1,7 +1,7 @@
 import { Comment as CommentInterface, Story } from "../global/interfaces";
 import Comment from "./Comment";
 import styles from "../styles/Content.module.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Content = (props: any) => {
   const { story }: { story: Story } = props;
@@ -14,11 +14,13 @@ const Content = (props: any) => {
     return (
       <>
         <div className={styles.storyHeader}>
+          <div className={styles.topRow}>
+            <div className={styles.author}>{by}</div>
+            {renderTime(time)}
+          </div>
           <a href={url} target="_blank" rel="noreferrer">
             <h1>{title}</h1>
           </a>
-          <div className={styles.author}>{by}</div>
-          {renderTime(time)}
         </div>
 
         <ul className={styles.commentsWrapper}>

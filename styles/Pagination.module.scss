@@ -3,6 +3,7 @@
 .pagination {
   position: sticky;
   display: flex;
+  align-items: center;
   bottom: 0;
   justify-content: center;
   padding: 20px 0 12px 0;
@@ -12,8 +13,10 @@
     rgba(255, 255, 255, 1) 60%,
     rgba(255, 255, 255, 0) 100%
   );
+  font-weight: 600;
 
   button {
+    @include button-styles;
     margin: 0 12px;
   }
 }

@@ -16,12 +16,15 @@ $color-lightest-grey: #f8f8f8;
 @mixin button-styles {
   border: none;
   outline: none;
-  background-color: $color-light-grey;
-  color: $color-black;
-  border-radius: 50%;
-  height: 20px;
-  width: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  color: $color-white;
+  font-weight: 600;
+  background-color: $color-orange;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  letter-spacing: 1px;
 }
